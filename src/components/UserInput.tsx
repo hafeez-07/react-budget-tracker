@@ -27,7 +27,6 @@ const UserInput = () => {
     if (savedTheme) setIsDark(JSON.parse(savedTheme));
   }, []);
 
-  // Apply/remove the "dark" class on <html> whenever isDark changes
   useEffect(() => {
     if (isDark) document.documentElement.classList.add("dark");
     else document.documentElement.classList.remove("dark");
@@ -60,7 +59,6 @@ const UserInput = () => {
 
   const deleteExpense = useCallback(
     (deleteId: number) => {
-      console.log("delete renders");
       const updatedExpense = expense.filter(
         (expense: ExpenseType) => expense.id !== deleteId
       );
@@ -70,7 +68,6 @@ const UserInput = () => {
   );
 
   const updateExpenseData = (updatedExpense: ExpenseType[]) => {
-    console.log("update expense renders");
     setExpense(updatedExpense);
     const totalSum = updatedExpense.reduce((res, cur) => res + cur.amount, 0);
     setBalance(totalSum);
@@ -80,19 +77,20 @@ const UserInput = () => {
 
   return (
     <div>
+      {/* Header */}
       <div
-        className="flex flex-col items-center  justify-between mb-4
-       dark:bg-gray-800 dark:text-white p-3 w-full shadow shadow-gray-500 "
+        className="flex flex-col items-center justify-between mb-4
+       dark:bg-gray-800 dark:text-white p-3 w-full shadow shadow-gray-500"
       >
-        <div className=" text-center  w-full">
-          <h1 className="text-xl sm:text-3xl font-bold ">Expense Tracker</h1>
-        </div>
+        <h1 className="text-xl sm:text-3xl font-bold text-center">
+          Expense Tracker
+        </h1>
 
-        <div className="flex w-full  justify-between mt-3 px-2  text-center">
+        <div className="flex w-full justify-between mt-3 px-2 text-center">
           <button
             onClick={themeToggle}
-            className="flex gap-3 items-center border rounded px-2 h-10 font-semibold
-            hover:outline-2"
+            className="flex gap-3 items-center border rounded px-3 py-2 font-semibold
+            hover:bg-gray-200 dark:hover:bg-gray-700 transition"
           >
             Theme {isDark ? <FaSun color="yellow" /> : <FaMoon color="gray" />}
           </button>
@@ -100,56 +98,74 @@ const UserInput = () => {
         </div>
       </div>
 
+      {/* Form */}
       <form onSubmit={submitHandler}>
         <div
-          className="flex  w-[95%] max-w-md flex-col mx-2  sm:mx-auto sm:w-130
-         font-semibold sm:gap-2 border-2 p-2 min-w-0 bg-[#CAE8BD]"
+          className="flex w-[95%] max-w-md flex-col mx-2 sm:mx-auto sm:w-130
+         font-semibold gap-4 border-2 p-6 min-w-0 rounded-2xl
+         shadow-md bg-gradient-to-br from-[#CAE8BD] to-[#A8D5BA]
+         dark:from-gray-700 dark:to-gray-800"
         >
-          <div className=" flex gap-2 flex-col sm:flex-row justify-between my-3">
-            <label className="text-xs  sm:text-lg flex-2 sm:text-right sm:pr-5">
-              Enter Description :
+          {/* Description */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+            <label className="sm:w-40 text-xs sm:text-base font-medium text-gray-700 dark:text-gray-300">
+              Enter Description:
             </label>
             <input
               type="text"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
-              className="border rounded flex-3 pl-2"
-            ></input>
+              className="flex-1 border rounded-lg px-3 py-2 shadow-sm
+              focus:outline-none focus:ring-2 focus:ring-amber-400
+              dark:bg-gray-900 dark:text-white"
+            />
           </div>
-          <div className="flex flex-col gap-2 sm:flex-row  justify-between min-w-0 mb-3">
-            <label className="flex-2 sm:text-right sm:pr-5 text-xs sm:text-lg">
-              Enter Amount :
+
+          {/* Amount */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+            <label className="sm:w-40 text-xs sm:text-base font-medium text-gray-700 dark:text-gray-300">
+              Enter Amount:
             </label>
             <input
               type="number"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               required
-              className="border rounded flex-3"
-            ></input>
+              className="flex-1 border rounded-lg px-3 py-2 shadow-sm
+              focus:outline-none focus:ring-2 focus:ring-amber-400
+              dark:bg-gray-900 dark:text-white"
+            />
           </div>
-          <div className="flex flex-col gap-2 sm:flex-row  justify-between min-w-0 mb-3">
-            <label className="flex-2 sm:text-right sm:pr-5 text-xs sm:text-lg">
-              Enter Date :
+
+          {/* Date */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+            <label className="sm:w-40 text-xs sm:text-base font-medium text-gray-700 dark:text-gray-300">
+              Enter Date:
             </label>
             <input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
               required
-              className="border rounded flex-3 pl-2"
+              className="flex-1 border rounded-lg px-3 py-2 shadow-sm
+              focus:outline-none focus:ring-2 focus:ring-amber-400
+              dark:bg-gray-900 dark:text-white"
             />
           </div>
+
+          {/* Add button */}
           <button
             type="submit"
-            className="border-2  rounded  bg-amber-500 text-amber-50
-             hover:outline-2 w-15 mx-auto"
+            className="border-2 rounded-lg bg-amber-500 text-white font-semibold px-4 py-2
+             hover:bg-amber-600 transition duration-200 shadow-md w-fit mx-auto"
           >
-            Add
+            Add Expense
           </button>
         </div>
       </form>
+
+      {/* Expense list */}
       <ExpenseList
         expense={expense}
         deleteExpense={deleteExpense}
