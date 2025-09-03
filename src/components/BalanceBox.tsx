@@ -6,7 +6,10 @@ type BalanceBoxProps = {
 
 const BalanceBox = ({ balance }: BalanceBoxProps) => {
   return (
-    <div className="text-xs sm:text-lg text-center ml-autofont-semibold border p-1 rounded ">
+    <div
+      className="text-xs sm:text-lg text-center ml-auto font-semibold 
+    border p-1 rounded hover:outline-2"
+    >
       <p>Total </p>
       <p> 💲{balance}</p>
     </div>

@@ -7,22 +7,24 @@ export type ExpenseType = {
   id: number;
   description: string;
   amount: number;
+  date: string;
 };
 
 const UserInput = () => {
-  console.log("userInput renders");
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [expense, setExpense] = useState<ExpenseType[]>([]);
   const [balance, setBalance] = useState(0);
   const [isDark, setIsDark] = useState(true);
+  const [date, setDate] = useState("");
 
   useEffect(() => {
     const savedExpense = localStorage.getItem("expense");
     const savedBalance = localStorage.getItem("balance");
-
+    const savedTheme = localStorage.getItem("savedTheme");
     if (savedExpense) setExpense(JSON.parse(savedExpense));
     if (savedBalance) setBalance(JSON.parse(savedBalance));
+    if (savedTheme) setIsDark(JSON.parse(savedTheme));
   }, []);
 
   // Apply/remove the "dark" class on <html> whenever isDark changes
@@ -41,12 +43,19 @@ const UserInput = () => {
       id: Date.now(),
       description: description,
       amount: parseFloat(amount),
+      date,
     };
     const updatedExpense = [...expense, newExpense];
     setDescription("");
     setAmount("");
-    // setExpense(updatedExpense)
+    setDate("");
     updateExpenseData(updatedExpense);
+  };
+
+  const themeToggle = () => {
+    const newTheme = !isDark;
+    setIsDark(newTheme);
+    localStorage.setItem("savedTheme", JSON.stringify(newTheme));
   };
 
   const deleteExpense = useCallback(
@@ -76,13 +85,14 @@ const UserInput = () => {
        dark:bg-gray-800 dark:text-white p-3 w-full shadow shadow-gray-500 "
       >
         <div className=" text-center  w-full">
-          <h1 className="text-xl sm:text-3xl font-bold">Expense Tracker</h1>
+          <h1 className="text-xl sm:text-3xl font-bold ">Expense Tracker</h1>
         </div>
 
         <div className="flex w-full  justify-between mt-3 px-2  text-center">
           <button
-            onClick={() => setIsDark(!isDark)}
-            className="flex gap-3 items-center border rounded px-2 h-10 font-semibold"
+            onClick={themeToggle}
+            className="flex gap-3 items-center border rounded px-2 h-10 font-semibold
+            hover:outline-2"
           >
             Theme {isDark ? <FaSun color="yellow" /> : <FaMoon color="gray" />}
           </button>
@@ -96,33 +106,45 @@ const UserInput = () => {
          font-semibold sm:gap-2 border-2 p-2 min-w-0 bg-[#CAE8BD]"
         >
           <div className=" flex gap-2 flex-col sm:flex-row justify-between my-3">
-            <label className="text-xs sm:text-lg flex-1 sm:text-right sm:pr-5">
-              Description :{" "}
+            <label className="text-xs  sm:text-lg flex-2 sm:text-right sm:pr-5">
+              Enter Description :
             </label>
             <input
               type="text"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
-              className="border rounded flex-2 pl-2"
+              className="border rounded flex-3 pl-2"
             ></input>
           </div>
           <div className="flex flex-col gap-2 sm:flex-row  justify-between min-w-0 mb-3">
-            <label className="flex-1 sm:text-right sm:pr-5 text-xs sm:text-lg">
-              Amount :
+            <label className="flex-2 sm:text-right sm:pr-5 text-xs sm:text-lg">
+              Enter Amount :
             </label>
             <input
               type="number"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               required
-              className="border rounded flex-2"
+              className="border rounded flex-3"
             ></input>
+          </div>
+          <div className="flex flex-col gap-2 sm:flex-row  justify-between min-w-0 mb-3">
+            <label className="flex-2 sm:text-right sm:pr-5 text-xs sm:text-lg">
+              Enter Date :
+            </label>
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              required
+              className="border rounded flex-3 pl-2"
+            />
           </div>
           <button
             type="submit"
             className="border-2  rounded  bg-amber-500 text-amber-50
-             hover:bg-amber-500/80 w-15 mx-auto"
+             hover:outline-2 w-15 mx-auto"
           >
             Add
           </button>
