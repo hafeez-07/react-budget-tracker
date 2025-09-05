@@ -1,6 +1,6 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import TransactionList from "./TransactionList";
-import SummaryBox from "./SummaryBox";
+
 import { FaSun, FaMoon } from "react-icons/fa";
 
 export type TransactionType = {
@@ -19,6 +19,7 @@ const UserInput = () => {
   const [isDark, setIsDark] = useState(true);
   const [date, setDate] = useState("");
   const [type, setType] = useState<"income" | "expense">("expense");
+  const summaryRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const savedTransactions = localStorage.getItem("transactions");
@@ -95,12 +96,20 @@ const UserInput = () => {
         <div className="flex w-full justify-between mt-3 px-2 text-center">
           <button
             onClick={themeToggle}
-            className="flex gap-3 items-center border rounded px-2  font-semibold
+            className="flex gap-3 items-center border rounded p-2  font-semibold
             hover:ring-2 dark:hover:bg-gray-700 transition mr-2"
           >
             Theme {isDark ? <FaSun color="yellow" /> : <FaMoon color="gray" />}
           </button>
-          <SummaryBox balance={balance} transactions={transactions} />
+          <button
+            onClick={() => {
+              if (transactions.length === 0) alert("No transactions yet!");
+              else summaryRef.current?.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="border rounded p-2 font-semibold hover:ring-3 ring-orange-300"
+          >
+            View summary
+          </button>
         </div>
       </div>
 
@@ -186,6 +195,8 @@ const UserInput = () => {
       <TransactionList
         transactions={transactions}
         deleteTransaction={deleteTransaction}
+        balance={balance}
+        summaryRef={summaryRef}
       />
     </div>
   );

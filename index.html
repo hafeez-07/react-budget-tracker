@@ -4,10 +4,27 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React + TS</title>
+    <title>Budget Tracker</title>
   </head>
-  <body class="bg-[#ECFAE5] dark:bg-gray-700">
+  <body class="flex flex-col bg-[#ECFAE5] dark:bg-gray-700 min-h-screen">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <footer class="text-center mt-auto p-3  border-t dark:bg-slate-800 dark:text-white">
+      <p class="font-semibold mb-2">How to use :</p>
+       <ul class="  list-disc list-inside text-gray-500 dark:text-gray-400 
+       space-y-1">
+    <li>Add your income and expenses with description & date</li>
+    <li>Check the summary below to track balance</li>
+    <li>Use the theme toggle for dark/light mode</li>
+  </ul>
+    <a
+    href="https://github.com/hafeez-07/react-budget-tracker/blob/main/README.md"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="text-blue-500 hover:underline block mt-2"
+  >
+    Read detailed guide →
+  </a>
+    </footer>
   </body>
 </html>

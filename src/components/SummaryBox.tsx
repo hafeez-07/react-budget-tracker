@@ -19,25 +19,34 @@ const SummaryBox = ({ balance, transactions }: SummaryBoxProps) => {
       return res + cur.amount;
     }, 0);
   return (
-    <div className="flex gap-x-3 font-bold">
-      <div className="border rounded p-2 hover:ring-2 ring-green-400">
+    <div className="grid grid-cols-3 gap-3 font-bold  text-center min-w-0 max-w-150 my-4 sm:mx-auto mx-2 ">
+      <div
+        className="border   rounded p-2 hover:ring-2 ring-green-400
+      dark:bg-green-800 dark:text-green-200 dark:border-green-700  bg-green-100 text-green-700"
+      >
         <p>Income</p>
-        <p className="flex items-center justify-center gap-x-1 text-green-400">
-          <FaRupeeSign className="sm:text-md text-xs" />
+        <p className=" flex items-center justify-center gap-1 text-green-400 text-xs sm:text-lg">
+          <FaRupeeSign />
           {income.toLocaleString("en-IN")}
         </p>
       </div>
-      <div className="border rounded p-2 hover:ring-2 ring-red-400">
+      <div
+        className="border rounded p-2 hover:ring-2 ring-red-400 bg-red-100 text-red-900 
+      dark:bg-red-800  dark:text-red-200 dark:border-red-700"
+      >
         <p>Expense</p>
-        <p className="flex items-center gap-x-1 justify-center text-red-400 ">
-          <FaRupeeSign className="sm:text-md text-xs" />
+        <p className="flex items-center gap-1 justify-center text-red-400 text-xs sm:text-lg">
+          <FaRupeeSign />
           {expense.toLocaleString("en-IN")}
         </p>
       </div>
-      <div className="border rounded p-2 hover:ring-2 ring-blue-400 mr-2">
+      <div
+        className="border rounded p-2 hover:ring-2 ring-blue-400 bg-blue-100 text-blue-900
+      dark:text-blue-200 dark:bg-blue-800 dark:border-blue-700 "
+      >
         <p>Balance</p>
-        <p className="flex items-center justify-center text-blue-400 gap-x-1">
-          <FaRupeeSign className="sm:text-md text-xs" />
+        <p className="flex items-center justify-center text-blue-400 gap-1 text-xs sm:text-lg">
+          <FaRupeeSign />
           {balance.toLocaleString("en-IN")}
         </p>
       </div>
