@@ -1,28 +1,30 @@
 import { useState, useEffect, useCallback } from "react";
-import ExpenseList from "./ExpenseList";
-import BalanceBox from "./BalanceBox";
+import TransactionList from "./TransactionList";
+import SummaryBox from "./SummaryBox";
 import { FaSun, FaMoon } from "react-icons/fa";
 
-export type ExpenseType = {
+export type TransactionType = {
   id: number;
   description: string;
   amount: number;
   date: string;
+  type: "income" | "expense";
 };
 
 const UserInput = () => {
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
-  const [expense, setExpense] = useState<ExpenseType[]>([]);
+  const [transactions, setTransactions] = useState<TransactionType[]>([]);
   const [balance, setBalance] = useState(0);
   const [isDark, setIsDark] = useState(true);
   const [date, setDate] = useState("");
+  const [type, setType] = useState<"income" | "expense">("expense");
 
   useEffect(() => {
-    const savedExpense = localStorage.getItem("expense");
+    const savedTransactions = localStorage.getItem("transactions");
     const savedBalance = localStorage.getItem("balance");
     const savedTheme = localStorage.getItem("savedTheme");
-    if (savedExpense) setExpense(JSON.parse(savedExpense));
+    if (savedTransactions) setTransactions(JSON.parse(savedTransactions));
     if (savedBalance) setBalance(JSON.parse(savedBalance));
     if (savedTheme) setIsDark(JSON.parse(savedTheme));
   }, []);
@@ -35,20 +37,21 @@ const UserInput = () => {
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (description === "" || parseFloat(amount) <= 0) {
-      alert("please enter valid inputs");
+      alert("Please enter valid inputs");
       return;
     }
-    const newExpense = {
+    const newTransaction: TransactionType = {
       id: Date.now(),
-      description: description,
+      description,
       amount: parseFloat(amount),
       date,
+      type,
     };
-    const updatedExpense = [...expense, newExpense];
+    const updatedTransactions = [...transactions, newTransaction];
     setDescription("");
     setAmount("");
     setDate("");
-    updateExpenseData(updatedExpense);
+    updateTransactionData(updatedTransactions);
   };
 
   const themeToggle = () => {
@@ -57,48 +60,50 @@ const UserInput = () => {
     localStorage.setItem("savedTheme", JSON.stringify(newTheme));
   };
 
-  const deleteExpense = useCallback(
+  const deleteTransaction = useCallback(
     (deleteId: number) => {
-      const updatedExpense = expense.filter(
-        (expense: ExpenseType) => expense.id !== deleteId
+      const updatedTransactions = transactions.filter(
+        (transaction) => transaction.id !== deleteId
       );
-      updateExpenseData(updatedExpense);
+      updateTransactionData(updatedTransactions);
     },
-    [expense]
+    [transactions]
   );
 
-  const updateExpenseData = (updatedExpense: ExpenseType[]) => {
-    setExpense(updatedExpense);
-    const totalSum = updatedExpense.reduce((res, cur) => res + cur.amount, 0);
+  const updateTransactionData = (updatedTransactions: TransactionType[]) => {
+    setTransactions(updatedTransactions);
+
+    const totalSum = updatedTransactions.reduce((res, cur) => {
+      return cur.type === "expense" ? res - cur.amount : res + cur.amount;
+    }, 0);
+
     setBalance(totalSum);
-    localStorage.setItem("expense", JSON.stringify(updatedExpense));
+    localStorage.setItem("transactions", JSON.stringify(updatedTransactions));
     localStorage.setItem("balance", JSON.stringify(totalSum));
   };
 
   return (
     <div>
-      {/* Header */}
       <div
         className="flex flex-col items-center justify-between mb-4
        dark:bg-gray-800 dark:text-white p-3 w-full shadow shadow-gray-500"
       >
         <h1 className="text-xl sm:text-3xl font-bold text-center">
-          Expense Tracker
+          Budget Tracker
         </h1>
 
         <div className="flex w-full justify-between mt-3 px-2 text-center">
           <button
             onClick={themeToggle}
-            className="flex gap-3 items-center border rounded px-3 py-2 font-semibold
-            hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+            className="flex gap-3 items-center border rounded px-2  font-semibold
+            hover:ring-2 dark:hover:bg-gray-700 transition mr-2"
           >
             Theme {isDark ? <FaSun color="yellow" /> : <FaMoon color="gray" />}
           </button>
-          <BalanceBox balance={balance}></BalanceBox>
+          <SummaryBox balance={balance} transactions={transactions} />
         </div>
       </div>
 
-      {/* Form */}
       <form onSubmit={submitHandler}>
         <div
           className="flex w-[95%] max-w-md flex-col mx-2 sm:mx-auto sm:w-130
@@ -106,70 +111,82 @@ const UserInput = () => {
          shadow-md bg-gradient-to-br from-[#CAE8BD] to-[#A8D5BA]
          dark:from-gray-700 dark:to-gray-800"
         >
-          {/* Description */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
             <label className="sm:w-40 text-xs sm:text-base font-medium text-gray-700 dark:text-gray-300">
-              Enter Description:
+              Enter Description :
             </label>
             <input
               type="text"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
-              className="flex-1 border rounded-lg px-3 py-2 shadow-sm
+              className="flex-1 h-10 border rounded-lg px-3 py-2 shadow-sm
               focus:outline-none focus:ring-2 focus:ring-amber-400
               dark:bg-gray-900 dark:text-white"
             />
           </div>
 
-          {/* Amount */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
             <label className="sm:w-40 text-xs sm:text-base font-medium text-gray-700 dark:text-gray-300">
-              Enter Amount:
+              Enter Amount :
             </label>
             <input
               type="number"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
               required
-              className="flex-1 border rounded-lg px-3 py-2 shadow-sm
+              className="flex-1 h-10 border rounded-lg px-3 py-2 shadow-sm
               focus:outline-none focus:ring-2 focus:ring-amber-400
               dark:bg-gray-900 dark:text-white"
             />
           </div>
 
-          {/* Date */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
             <label className="sm:w-40 text-xs sm:text-base font-medium text-gray-700 dark:text-gray-300">
-              Enter Date:
+              Enter Type :
+            </label>
+            <select
+              value={type}
+              onChange={(e) => setType(e.target.value as "income" | "expense")}
+              className="flex-1 h-10 border rounded-lg px-3 py-2 shadow-sm
+              focus:outline-none focus:ring-2 focus:ring-amber-400
+              dark:bg-gray-900 dark:text-white"
+              required
+            >
+              <option value="expense">Expense</option>
+              <option value="income">Income</option>
+            </select>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
+            <label className="sm:w-40 text-xs sm:text-base font-medium text-gray-700 dark:text-gray-300">
+              Enter Date :
             </label>
             <input
               type="date"
               value={date}
               onChange={(e) => setDate(e.target.value)}
               required
-              className="flex-1 border rounded-lg px-3 py-2 shadow-sm
+              className="flex-1 h-10 border rounded-lg px-3 py-2 shadow-sm
               focus:outline-none focus:ring-2 focus:ring-amber-400
               dark:bg-gray-900 dark:text-white"
             />
           </div>
 
-          {/* Add button */}
           <button
             type="submit"
             className="border-2 rounded-lg bg-amber-500 text-white font-semibold px-4 py-2
              hover:bg-amber-600 transition duration-200 shadow-md w-fit mx-auto"
           >
-            Add Expense
+            Add Transaction
           </button>
         </div>
       </form>
 
-      {/* Expense list */}
-      <ExpenseList
-        expense={expense}
-        deleteExpense={deleteExpense}
-      ></ExpenseList>
+      <TransactionList
+        transactions={transactions}
+        deleteTransaction={deleteTransaction}
+      />
     </div>
   );
 };
