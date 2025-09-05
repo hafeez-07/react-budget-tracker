@@ -2,6 +2,10 @@
 
 A simple **React + TypeScript** app to track your **Income, Expenses, and Balance** with a clean UI and **Dark/Light theme toggle**.
 
+## 🚀 Live Demo
+
+👉 [Click here to view the app](https://react-budget-tracker-three.vercel.app/)
+
 ## ✨ Features
 
 - ✅ Add **income** & **expense** transactions
