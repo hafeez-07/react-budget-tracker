@@ -9,9 +9,9 @@ Track your expenses, set your balance, and see your spending organized by date. 
 
 ## 🖼️ Screenshots
 
-| Light Mode                                  | Dark Mode                                 |
-| ------------------------------------------- | ----------------------------------------- |
-| ![Light Mode](./src/assets/screenshot2.png) | ![Dark Mode](./src/assets/screenshot.png) |
+| Light Mode                                | Dark Mode                               |
+| ----------------------------------------- | --------------------------------------- |
+| ![Light Mode](./src/assets/lightMode.png) | ![Dark Mode](./src/assets/darkMode.png) |
 
 ## Features
 
