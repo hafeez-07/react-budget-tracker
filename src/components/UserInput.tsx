@@ -86,32 +86,35 @@ const UserInput = () => {
   return (
     <div>
       <div
-        className="flex flex-col items-center justify-between mb-4
-       dark:bg-gray-800 dark:text-white p-3 w-full shadow shadow-gray-500"
-      >
-        <h1 className="text-xl sm:text-3xl font-bold text-center">
-          Budget Tracker
-        </h1>
+  className="flex items-center justify-between mb-4
+  dark:bg-gray-800 dark:text-white p-3 w-full shadow shadow-gray-500"
+>
+  {/* Left: Heading */}
+  <h1 className="text-xl sm:text-3xl font-bold">
+    Income Tracker
+  </h1>
 
-        <div className="flex w-full justify-between mt-3 px-2 text-center">
-          <button
-            onClick={themeToggle}
-            className="flex gap-3 items-center border rounded p-2  font-semibold
-            hover:ring-2 dark:hover:bg-gray-700 transition mr-2"
-          >
-            Theme {isDark ? <FaSun color="yellow" /> : <FaMoon color="gray" />}
-          </button>
-          <button
-            onClick={() => {
-              if (transactions.length === 0) alert("No transactions yet!");
-              else summaryRef.current?.scrollIntoView({ behavior: "smooth" });
-            }}
-            className="border rounded p-2 font-semibold hover:ring-3 ring-orange-300"
-          >
-            View summary
-          </button>
-        </div>
-      </div>
+  {/* Right: Buttons */}
+  <div className="flex gap-3">
+    <button
+      onClick={themeToggle}
+      className="flex gap-2 items-center   p-2 font-semibold
+      hover:ring-2 dark:hover:bg-gray-700 transition"
+    >
+      {isDark ? <FaSun color="yellow" /> : <FaMoon color="gray" />}
+    </button>
+
+    <button
+      onClick={() => {
+        if (transactions.length === 0) alert("No transactions yet!");
+        else summaryRef.current?.scrollIntoView({ behavior: "smooth" });
+      }}
+      className="border rounded p-2 font-semibold hover:ring-2 ring-orange-300"
+    >
+      Summary
+    </button>
+  </div>
+</div>
 
       <form onSubmit={submitHandler}>
         <div
