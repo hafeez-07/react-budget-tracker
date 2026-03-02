@@ -4,6 +4,7 @@ import TransactionForm from "./components/TransactionForm";
 import TransactionList from "./components/TransactionList";
 import SummarySection from "./components/SummarySection";
 import Footer from "./components/Footer";
+import { Toaster, toast } from "sonner";
 
 export type TransactionType = {
   id: number;
@@ -47,7 +48,20 @@ function App() {
   }, [isDark]);
 
   const deleteTransaction = useCallback((id: number) => {
-    setTransactions((prev) => prev.filter((tx) => tx.id !== id));
+    toast("confirm delete?", {
+      duration: 3000,
+      description: "This will permanently delete the data",
+      action: {
+        label: "confirm",
+        onClick: () => {
+          setTransactions((prev) => prev.filter((tx) => tx.id !== id));
+        },
+      },
+      cancel: {
+        label: "cancel",
+        onClick: () => {},
+      },
+    });
   }, []);
 
   const balance = transactions.reduce((acc, tx) => {
@@ -55,20 +69,22 @@ function App() {
   }, 0);
 
   return (
-    <div className="min-h-screen bg-zinc-100 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 transition-colors duration-300">
+    <div className="min-h-screen flex flex-col bg-zinc-100 text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100 transition-colors duration-300">
+      <Toaster position="top-center" />
       <Navbar isDark={isDark} setIsDark={setIsDark} />
 
-      <div className="max-w-6xl mx-auto px-4 py-10 space-y-12">
+      <div className="w-full max-w-6xl mx-auto px-4 py-10 space-y-12">
         <SummarySection transactions={transactions} balance={balance} />
 
         <TransactionForm setTransactions={setTransactions} />
 
         <TransactionList
           transactions={transactions}
+          setTransactions={setTransactions}
           deleteTransaction={deleteTransaction}
         />
-        <Footer />
       </div>
+      <Footer />
     </div>
   );
 }

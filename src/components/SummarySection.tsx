@@ -41,6 +41,7 @@ const Card = ({ title, value, variant }: CardProps) => {
   return (
     <div
       className="
+     
       bg-white border border-zinc-200
       dark:bg-zinc-900 dark:border-zinc-800
       rounded-2xl p-6 shadow-md

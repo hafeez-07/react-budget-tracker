@@ -1,11 +1,71 @@
+import { useRef } from "react";
 import type { TransactionType } from "../App";
+import { toast } from "sonner";
 
 type Props = {
   transactions: TransactionType[];
+  setTransactions: React.Dispatch<React.SetStateAction<TransactionType[]>>;
   deleteTransaction: (id: number) => void;
 };
 
-const TransactionList = ({ transactions, deleteTransaction }: Props) => {
+const TransactionList = ({
+  transactions,
+  deleteTransaction,
+  setTransactions,
+}: Props) => {
+  const backupRef = useRef<TransactionType[] | null>(null);
+
+  //sort transactions by dates
+  const sortedTransactions = [...transactions].sort(
+    (a: TransactionType, b: TransactionType) => {
+      //if entered in different changes , sort
+      const diff = new Date(b.date).getTime() - new Date(a.date).getTime();
+      if (diff != 0) return diff;
+
+      //if the entries are in the same date , recent or last entered will come on top
+      return b.id - a.id;
+    },
+  );
+
+  const deleteAll = () => {
+    if (transactions.length === 0) {
+      return toast.error("No transactions to delete", {
+        duration: 2000,
+      });
+    }
+
+    toast("Confirm delete?", {
+      duration: 4000,
+      description: "You will lose all transactions permanently",
+      action: {
+        label: "confirm",
+        onClick: () => {
+          //store backup
+          backupRef.current = [...transactions];
+
+          setTransactions([]);
+
+          toast.success("All transactions cleared", {
+            duration: 6000,
+            action: {
+              label: "undo",
+              onClick: () => {
+                if (backupRef.current) {
+                  setTransactions(backupRef.current);
+                  backupRef.current = null;
+                }
+              },
+            },
+          });
+        },
+      },
+      cancel: {
+        label: "cancel",
+        onClick: () => {},
+      },
+    });
+  };
+
   return (
     <div
       className="
@@ -16,7 +76,15 @@ const TransactionList = ({ transactions, deleteTransaction }: Props) => {
       transition-colors duration-300
       "
     >
-      <h2 className="text-xl font-semibold mb-6">Transactions</h2>
+      <div className="flex justify-between mb-6">
+        <h2 className="text-xl font-semibold ">Transactions</h2>
+        <button
+          className="border-2border-red-600  bg-red-500  p-1 rounded hover:bg-red-600 hover:border-red-700"
+          onClick={deleteAll}
+        >
+          Clear All
+        </button>
+      </div>
 
       {transactions.length === 0 ? (
         <p className="text-zinc-500 dark:text-zinc-400 text-center py-8">
@@ -24,7 +92,7 @@ const TransactionList = ({ transactions, deleteTransaction }: Props) => {
         </p>
       ) : (
         <div className="divide-y divide-zinc-200 dark:divide-zinc-800">
-          {transactions.map((tx) => (
+          {sortedTransactions.map((tx) => (
             <div
               key={tx.id}
               className="
@@ -58,14 +126,12 @@ const TransactionList = ({ transactions, deleteTransaction }: Props) => {
 
                 <button
                   onClick={() => deleteTransaction(tx.id)}
-              className="
-text-sm
-text-zinc-400
-hover:text-red-500
-dark:hover:text-red-400
-transition
-
-"
+                  className="
+                    text-sm
+                  text-zinc-400
+                  hover:text-red-500
+                  dark:hover:text-red-400
+                  transition"
                 >
                   Delete
                 </button>

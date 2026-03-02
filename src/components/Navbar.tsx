@@ -14,7 +14,7 @@ dark:bg-zinc-900/70 dark:border-zinc-800
 transition-colors duration-300"
     >
       <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-        <h1 className="text-2xl font-semibold tracking-tight">
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
           Budget Tracker
         </h1>
 

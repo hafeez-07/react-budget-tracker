@@ -1,10 +1,9 @@
 import { useState } from "react";
 import type { TransactionType } from "../App";
+import { toast } from "sonner";
 
 type Props = {
-  setTransactions: React.Dispatch<
-    React.SetStateAction<TransactionType[]>
-  >;
+  setTransactions: React.Dispatch<React.SetStateAction<TransactionType[]>>;
 };
 
 const TransactionForm = ({ setTransactions }: Props) => {
@@ -31,6 +30,9 @@ const TransactionForm = ({ setTransactions }: Props) => {
     setDescription("");
     setAmount("");
     setDate("");
+    toast.success("Transaction saved succesfully", {
+      duration: 1000,
+    });
   };
 
   return (
@@ -58,12 +60,7 @@ const TransactionForm = ({ setTransactions }: Props) => {
           onChange={setAmount}
         />
 
-        <Input
-          label="Date"
-          type="date"
-          value={date}
-          onChange={setDate}
-        />
+        <Input label="Date" type="date" value={date} onChange={setDate} />
 
         <div className="flex flex-col gap-2">
           <label className="text-sm text-zinc-500 dark:text-zinc-400">
@@ -71,9 +68,7 @@ const TransactionForm = ({ setTransactions }: Props) => {
           </label>
           <select
             value={type}
-            onChange={(e) =>
-              setType(e.target.value as "income" | "expense")
-            }
+            onChange={(e) => setType(e.target.value as "income" | "expense")}
             className="
             bg-zinc-100 border border-zinc-300
             dark:bg-zinc-800 dark:border-zinc-700
@@ -114,16 +109,9 @@ type InputProps = {
   type?: string;
 };
 
-const Input = ({
-  label,
-  value,
-  onChange,
-  type = "text",
-}: InputProps) => (
+const Input = ({ label, value, onChange, type = "text" }: InputProps) => (
   <div className="flex flex-col gap-2">
-    <label className="text-sm text-zinc-500 dark:text-zinc-400">
-      {label}
-    </label>
+    <label className="text-sm text-zinc-500 dark:text-zinc-400">{label}</label>
     <input
       type={type}
       value={value}
