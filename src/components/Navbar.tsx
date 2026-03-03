@@ -3,6 +3,7 @@ import { FaSun, FaMoon } from "react-icons/fa";
 type Props = {
   isDark: boolean;
   setIsDark: React.Dispatch<React.SetStateAction<boolean>>;
+  // setIsDark: (value:boolean | ((prev:boolean) => boolean))=>void
 };
 
 const Navbar = ({ isDark, setIsDark }: Props) => {
@@ -26,7 +27,11 @@ bg-zinc-200 hover:bg-zinc-300
 dark:bg-zinc-800 dark:hover:bg-zinc-700 
 transition"
           >
-            {isDark ? <FaSun className="text-yellow-400" /> : <FaMoon className="text-gray-700"/>}
+            {isDark ? (
+              <FaSun className="text-yellow-400" />
+            ) : (
+              <FaMoon className="text-gray-700" />
+            )}
           </button>
         </div>
       </div>
