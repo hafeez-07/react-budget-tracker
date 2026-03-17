@@ -125,7 +125,9 @@ const TransactionList = ({
                 </span>
 
                 <button
-                  onClick={() => deleteTransaction(tx.id)}
+                  onClick={(e) => {
+                    deleteTransaction(tx.id);
+                  }}
                   className="
                     text-sm
                   text-zinc-400

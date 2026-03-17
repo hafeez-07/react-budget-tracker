@@ -16,7 +16,7 @@ transition-colors duration-300"
     >
       <div className="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-          Budget Tracker
+          Expense Tracker
         </h1>
 
         <div className="flex items-center gap-3">
