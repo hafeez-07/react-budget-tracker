@@ -9,8 +9,8 @@ Track your expenses, set your balance, and see your spending organized by date. 
 
 ## 🖼️ Screenshots
 
-| Light Mode                                       | Dark Mode                                      |
-| ------------------------------------------------ | ---------------------------------------------- |
+| Light Mode                                           | Dark Mode                                          |
+| ---------------------------------------------------- | -------------------------------------------------- |
 | ![Light Mode](./src/assets/budget_tracker_light.png) | ![Dark Mode](./src/assets/budget_tracker_dark.png) |
 
 ## Features
@@ -33,7 +33,6 @@ Track your expenses, set your balance, and see your spending organized by date. 
    - Pick the **date** of the expense.
    - Click **Add**.
 4. **View Expenses**:
-   - Expenses are grouped by date.
    - Scroll to see all entries.
 5. **Delete Expenses**: Click the **delete button** next to an expense to remove it.
 6. **Switch Theme**: Use the dark mode toggle to switch between light and dark themes.
